@@ -1,0 +1,17 @@
+{
+  "id": "prototypes",
+  "version": "1.0.0",
+  "kibanaVersion": "kibana",
+  "owner": {
+    "name": "Paul Tavares",
+    "githubTeam": ""
+  },
+  "description": "prototypes",
+  "server": true,
+  "ui": true,
+  "requiredPlugins": ["navigation"],
+  "optionalPlugins": [],
+  "requiredBundles": [
+    "kibanaReact"
+  ]
+}
