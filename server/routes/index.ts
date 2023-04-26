@@ -1,4 +1,5 @@
-import { IRouter } from '../../../../src/core/server';
+import { IRouter } from '@kbn/core/server';
+import { FileUploadRequestSchema, getFileUploadHandler } from './handlers/file_upload';
 
 export function defineRoutes(router: IRouter) {
   router.get(
@@ -13,5 +14,20 @@ export function defineRoutes(router: IRouter) {
         },
       });
     }
+  );
+
+  router.post(
+    {
+      path: '/api/prototypes/file_upload',
+      validate: FileUploadRequestSchema,
+      options: {
+        body: {
+          output: 'stream',
+          maxBytes: 26214400, // 25MB payload limit
+          accepts: ['multipart/form-data'],
+        },
+      },
+    },
+    getFileUploadHandler()
   );
 }

@@ -14,6 +14,7 @@ import {
 
 import { CoreStart, ScopedHistory } from '@kbn/core/public';
 
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { PLUGIN_NAME } from '../../common';
 import { AppPluginStartDependencies } from '../types';
 import { PageNotFound } from './page_not_found';
@@ -27,6 +28,8 @@ interface PrototypesAppDeps {
   startDep: AppPluginStartDependencies;
 }
 
+const queryClient = new QueryClient();
+
 export const PrototypesApp = ({ basename, history, coreStart, startDep }: PrototypesAppDeps) => {
   return (
     <KibanaContextProvider
@@ -37,40 +40,42 @@ export const PrototypesApp = ({ basename, history, coreStart, startDep }: Protot
         ...coreStart,
       }}
     >
-      <Router history={history}>
-        <I18nProvider>
-          <>
-            <EuiPage paddingSize="xl">
-              <EuiPageBody>
-                <EuiPageHeader>
-                  <EuiTitle size="l">
-                    <h1>
-                      <FormattedMessage
-                        id="prototypes.helloWorldText"
-                        defaultMessage="{name}"
-                        values={{ name: PLUGIN_NAME }}
-                      />
-                    </h1>
-                  </EuiTitle>
-                </EuiPageHeader>
-                <EuiPageContent>
-                  <EuiPageContentBody>
-                    <Router history={history}>
-                      <Switch>
-                        <Route path="/" exact component={HomePage} />
+      <QueryClientProvider client={queryClient}>
+        <Router history={history}>
+          <I18nProvider>
+            <>
+              <EuiPage paddingSize="xl">
+                <EuiPageBody>
+                  <EuiPageHeader>
+                    <EuiTitle size="l">
+                      <h1>
+                        <FormattedMessage
+                          id="prototypes.helloWorldText"
+                          defaultMessage="{name}"
+                          values={{ name: PLUGIN_NAME }}
+                        />
+                      </h1>
+                    </EuiTitle>
+                  </EuiPageHeader>
+                  <EuiPageContent>
+                    <EuiPageContentBody>
+                      <Router history={history}>
+                        <Switch>
+                          <Route path="/" exact component={HomePage} />
 
-                        <Route path="/file_upload" exact component={FileUploadPage} />
+                          <Route path="/file_upload" exact component={FileUploadPage} />
 
-                        <Route path="*" component={PageNotFound} />
-                      </Switch>
-                    </Router>
-                  </EuiPageContentBody>
-                </EuiPageContent>
-              </EuiPageBody>
-            </EuiPage>
-          </>
-        </I18nProvider>
-      </Router>
+                          <Route path="*" component={PageNotFound} />
+                        </Switch>
+                      </Router>
+                    </EuiPageContentBody>
+                  </EuiPageContent>
+                </EuiPageBody>
+              </EuiPage>
+            </>
+          </I18nProvider>
+        </Router>
+      </QueryClientProvider>
     </KibanaContextProvider>
   );
 };

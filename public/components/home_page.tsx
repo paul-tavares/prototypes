@@ -1,9 +1,8 @@
 import React, { memo } from 'react';
 import { EuiCard } from '@elastic/eui';
 import styled from '@emotion/styled';
-import { useKibana } from '@kbn/kibana-react-plugin/public';
-import { KibanaServices } from '../types';
 import { PLUGIN_ID } from '../../common';
+import { useKibanaServices } from '../hooks/use_kibana_services';
 
 const EuiCardStyled = styled(EuiCard)`
   width: 25%;
@@ -22,7 +21,7 @@ HomePage.displayName = 'HomePage';
 export const FileUploadPocCard = memo((props) => {
   const {
     application: { navigateToApp },
-  } = useKibana<KibanaServices>().services;
+  } = useKibanaServices();
 
   return (
     <EuiCardStyled
