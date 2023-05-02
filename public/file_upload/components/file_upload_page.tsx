@@ -16,6 +16,8 @@ import {
   EuiAccordionProps,
   EuiFormRow,
   EuiFieldTextProps,
+  EuiSwitch,
+  EuiSwitchProps,
 } from '@elastic/eui';
 import { useMutation } from '@tanstack/react-query';
 import { useKibanaServices } from '../../hooks/use_kibana_services';
@@ -27,6 +29,7 @@ export const FileUploadPage = memo(() => {
 
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [indexNamePrefix, setIndexNamePrefix] = useState('');
+  const [toEndpointUploadApi, setToEndpointUploadApi] = useState(false);
 
   const {
     isLoading,
@@ -38,16 +41,27 @@ export const FileUploadPage = memo(() => {
 
     formData.append('file', file, file.name);
 
-    if (indexNamePrefix) {
-      formData.append('indexPrefix', indexNamePrefix);
-    }
+    if (toEndpointUploadApi) {
+      formData.append('endpoint_ids', JSON.stringify(['63e7a9cf-5945-417d-89b8-027294b7a4f0']));
 
-    return http.post('/api/prototypes/file_upload', {
-      body: formData,
-      headers: {
-        'Content-Type': undefined,
-      },
-    });
+      return http.post('/api/endpoint/action/upload', {
+        body: formData,
+        headers: {
+          'Content-Type': undefined,
+        },
+      });
+    } else {
+      if (indexNamePrefix) {
+        formData.append('indexPrefix', indexNamePrefix);
+      }
+
+      return http.post('/api/prototypes/file_upload', {
+        body: formData,
+        headers: {
+          'Content-Type': undefined,
+        },
+      });
+    }
   });
 
   const filePickerChangeHandler: EuiFilePickerProps['onChange'] = useCallback(
@@ -65,6 +79,10 @@ export const FileUploadPage = memo(() => {
 
   const indexNamePrefixOnChangeHandler: EuiFieldTextProps['onChange'] = useCallback((ev) => {
     setIndexNamePrefix(ev.target.value);
+  }, []);
+
+  const sendToUploadApiOnChangeHandler: EuiSwitchProps['onChange'] = useCallback((ev) => {
+    setToEndpointUploadApi(ev.target.checked);
   }, []);
 
   return (
@@ -85,6 +103,20 @@ export const FileUploadPage = memo(() => {
           buttonContent="Options"
           onToggle={accordionOnToggleHandler}
         >
+          <EuiSpacer />
+
+          <EuiFormRow
+            fullWidth
+            label="Use Endpoint Upload Response Action API"
+            helpText="If enabled, then the Endpoint Upload response action API will be used instead. Index setting below is igonored"
+          >
+            <EuiSwitch
+              label="Send to Endpoint Upload API"
+              checked={toEndpointUploadApi}
+              onChange={sendToUploadApiOnChangeHandler}
+            />
+          </EuiFormRow>
+
           <EuiSpacer />
 
           <EuiFormRow
