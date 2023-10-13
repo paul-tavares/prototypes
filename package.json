@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "plugin-helpers": "NODE_OPTIONS=--openssl-legacy-provider node ../../scripts/plugin_helpers",
+    "kbn": "NODE_OPTIONS=--openssl-legacy-provider node ../../scripts/kbn",
     "build": "yarn plugin-helpers build",
     "dev": "yarn plugin-helpers dev",
     "dev:watch": "yarn dev --watch",
-    "plugin-helpers": "node ../../scripts/plugin_helpers",
-    "kbn": "node ../../scripts/kbn"
+    "bootstrap": "yarn kbn bootstrap && yarn install"
   }
 }

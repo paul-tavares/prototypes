@@ -15,11 +15,13 @@ import {
 import { CoreStart, ScopedHistory } from '@kbn/core/public';
 
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { EuiThemeProvider } from '@kbn/kibana-react-plugin/common';
 import { PLUGIN_NAME } from '../../common';
 import { AppPluginStartDependencies } from '../types';
 import { PageNotFound } from './page_not_found';
 import { HomePage } from './home_page';
 import { FileUploadPage } from '../file_upload';
+import { ConsoleViewPOCPage } from '../console_view/components/console_view_page';
 
 interface PrototypesAppDeps {
   basename: string;
@@ -40,42 +42,45 @@ export const PrototypesApp = ({ basename, history, coreStart, startDep }: Protot
         ...coreStart,
       }}
     >
-      <QueryClientProvider client={queryClient}>
-        <Router history={history}>
-          <I18nProvider>
-            <>
-              <EuiPage paddingSize="xl">
-                <EuiPageBody>
-                  <EuiPageHeader>
-                    <EuiTitle size="l">
-                      <h1>
-                        <FormattedMessage
-                          id="prototypes.helloWorldText"
-                          defaultMessage="{name}"
-                          values={{ name: PLUGIN_NAME }}
-                        />
-                      </h1>
-                    </EuiTitle>
-                  </EuiPageHeader>
-                  <EuiPageContent>
-                    <EuiPageContentBody>
-                      <Router history={history}>
-                        <Switch>
-                          <Route path="/" exact component={HomePage} />
+      <EuiThemeProvider darkMode={false}>
+        <QueryClientProvider client={queryClient}>
+          <Router history={history}>
+            <I18nProvider>
+              <>
+                <EuiPage paddingSize="xl">
+                  <EuiPageBody>
+                    <EuiPageHeader>
+                      <EuiTitle size="l">
+                        <h1>
+                          <FormattedMessage
+                            id="prototypes.helloWorldText"
+                            defaultMessage="{name}"
+                            values={{ name: PLUGIN_NAME }}
+                          />
+                        </h1>
+                      </EuiTitle>
+                    </EuiPageHeader>
+                    <EuiPageContent>
+                      <EuiPageContentBody>
+                        <Router history={history}>
+                          <Switch>
+                            <Route path="/" exact component={HomePage} />
 
-                          <Route path="/file_upload" exact component={FileUploadPage} />
+                            <Route path="/file_upload" exact component={FileUploadPage} />
+                            <Route path="/console_view" exact component={ConsoleViewPOCPage} />
 
-                          <Route path="*" component={PageNotFound} />
-                        </Switch>
-                      </Router>
-                    </EuiPageContentBody>
-                  </EuiPageContent>
-                </EuiPageBody>
-              </EuiPage>
-            </>
-          </I18nProvider>
-        </Router>
-      </QueryClientProvider>
+                            <Route path="*" component={PageNotFound} />
+                          </Switch>
+                        </Router>
+                      </EuiPageContentBody>
+                    </EuiPageContent>
+                  </EuiPageBody>
+                </EuiPage>
+              </>
+            </I18nProvider>
+          </Router>
+        </QueryClientProvider>
+      </EuiThemeProvider>
     </KibanaContextProvider>
   );
 };

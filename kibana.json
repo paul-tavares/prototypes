@@ -12,6 +12,7 @@
   "requiredPlugins": ["navigation"],
   "optionalPlugins": [],
   "requiredBundles": [
-    "kibanaReact"
+    "kibanaReact",
+    "securitySolution"
   ]
 }
