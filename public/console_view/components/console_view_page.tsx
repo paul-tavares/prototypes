@@ -60,7 +60,7 @@ export const ConsoleViewPOCPage = memo((props) => {
           id={'my-console-1'}
           consoleProps={{ commands: [], TitleComponent: () => <>{'Full page view console'}</> }}
           showCloseButton={true}
-          onClose={() => {
+          onHide={() => {
             setIsConsoleViewVisible(false);
           }}
         />
